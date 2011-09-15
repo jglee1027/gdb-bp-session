@@ -42,21 +42,30 @@
 (require 'gud)
 
 (defun gud-get-process-name ()
-  (process-name (get-buffer-process gud-comint-buffer)))
+  (let ((process (get-buffer-process gud-comint-buffer)))
+	(if (null process)
+		nil
+	  (process-name process))))
 
 ;;;###autoload
 (defun gdb-save-breakpoints ()
   "Save current breakpoint definitions as a script."
   (interactive)
-  (gud-basic-call (format "save breakpoints ~/.%s-breakpoints.gdb"
-						  (gud-get-process-name))))
+  (let ((gud-process-name (gud-get-process-name)))
+	(cond (gud-process-name
+		   (gud-basic-call
+			(format "save breakpoints ~/.%s-breakpoints.gdb"
+					gud-process-name))))))
 
 ;;;###autoload
 (defun gdb-restore-breakpoints ()
   "Restore the saved breakpoint definitions as a script."
   (interactive)
-  (gud-basic-call (format "source ~/.%s-breakpoints.gdb"
-						  (gud-get-process-name))))
+  (let ((breakpoints-file (format "~/.%s-breakpoints.gdb"
+								  (gud-get-process-name))))
+	(if (file-exists-p breakpoints-file)
+		(gud-basic-call (format "source %s" breakpoints-file)))))
+
 ;;;###autoload
 (defun gdb-kill-buffer ()
   "Kill gdb-buffer."
