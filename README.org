@@ -1,0 +1,20 @@
+=gdb-bp-session= provides keeping breakpoints which you set recently
+in gdb.  You should kill gdb buffer using =gdb-kill-buffer= function
+=C-x k= to save current breakpoints, that's all. Is it too easy? The
+current breakpionts are saved to
+=$HOME/.$PROCESS_NAME-breakpoints.gdb=
+
+* Quick setup
+  Download =gdb-bp-session=
+  : ~$ git clone git://github.com/jglee1027/gdb-bp-session.git
+
+  Add the following in ~/.emacs
+  : (add-to-list 'load-path "/path/to/gdb-bp-session")
+  : (require 'gdb-bp-session)
+
+* License
+  It is distributed under the GNU General Public License.
+  See the accompanying =GPL-3.0.txt= file for more details.
+
+* Bug report
+  Please use the issues tab to report any issues.
